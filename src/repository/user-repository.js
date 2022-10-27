@@ -11,6 +11,42 @@ exports.getAll = async() => {
 
 exports.create = async(data) => {
     let user = new User(data);
-    let userCreated = await user.save();
-    return await userCreated;
+    return await user.save();
+}
+
+exports.update = async(id, data) => {
+    
+    let userUpdated = await User.findByIdAndUpdate(id, {$set:
+    {
+        name: data.name,
+        email: data.email,
+        password : data.password,
+        status: data.status
+        }
+    });
+    
+}
+
+exports.delete = async(id, data) => {
+    
+    return await User.findOneAndDelete({_id: id});
+}
+
+exports.deleteLogic = async(id, data) => {
+    console.log (data);
+    return await User.findOneAndDelete(id, {
+        $set: {
+            status: false
+        }
+    });
+}
+
+exports.autenticate = async(data) => {
+    console.log(json.stringfy(data));
+        return await User.findOne(
+            {
+                email: data.email,
+                password: data.password
+            }
+        );
 }
